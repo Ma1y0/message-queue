@@ -1,5 +1,4 @@
 use std::sync::Arc;
-
 use tokio::{
     fs::OpenOptions,
     io::{AsyncReadExt, AsyncWriteExt},
@@ -35,9 +34,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     Err(_) => break,
                 };
 
+                buf[n] = b'\n';
+
                 let mut file_a = file_clone.write().await;
 
-                file_a.write_all(&buf[..n]).await;
+                // TODO: Handle this error. maybe?
+                println!("{:?}", &buf[..(n + 1)]);
+                let _ = file_a.write_all(&buf[..(n + 1)]).await;
             }
         });
     }
